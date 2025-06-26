@@ -9,8 +9,16 @@ builder.Services.AddDbContext<TareasContext>(options =>
 
 // Agregar servicios de controllers y endpoints
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.MapControllers();
 
