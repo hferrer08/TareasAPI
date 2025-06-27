@@ -23,7 +23,7 @@ namespace TareasAPI.Controllers
             return await _context.Tareas.ToListAsync();
         }
 
-       // GET: api/tareas/5
+        // GET: api/tareas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Tarea>> GetTarea(int id)
         {
@@ -33,27 +33,6 @@ namespace TareasAPI.Controllers
                 return NotFound();
 
             return tarea;
-        } 
-
-        [HttpGet("buscar")]
-        public async Task<ActionResult<IEnumerable<Tarea>>> Buscar(
-    int? id = null,
-    string? nombre = null,
-    bool? completada = null)
-        {
-            var query = _context.Tareas.AsQueryable();
-
-            if (id.HasValue)
-                query = query.Where(t => t.Id == id.Value);
-
-            if (!string.IsNullOrWhiteSpace(nombre))
-                query = query.Where(t => t.Nombre.Contains(nombre));
-
-            if (completada.HasValue)
-                query = query.Where(t => t.Completada == completada.Value);
-
-            var resultados = await query.ToListAsync();
-            return Ok(resultados);
         }
 
         // POST: api/tareas

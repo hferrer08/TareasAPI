@@ -13,7 +13,7 @@ obj/
 
 # SQLite database file (opcional)
 # Si quieres subir la base de datos, comenta esta línea
-#Tareas.db
+Tareas.db
 
 # Logs
 *.log
