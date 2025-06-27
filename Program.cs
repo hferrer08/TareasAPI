@@ -20,6 +20,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<TareasAPI.Middlewares.ErrorMiddleware>();
 app.MapControllers();
 
 app.Run();
