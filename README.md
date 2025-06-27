@@ -29,7 +29,3 @@ Este proyecto permite realizar operaciones CRUD (Crear, Leer, Actualizar, Elimin
 3. Ejecutar `dotnet run` para iniciar la API  
 4. Usar Postman o navegador para probar los endpoints
 
----
-
-Si tienes dudas o quieres colaborar, abre un issue o pull request.  
-¡Gracias por visitar este repositorio! 🚀
