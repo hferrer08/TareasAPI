@@ -1,11 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using TareasAPI.Data;
+ using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
+//Conexión base de datos
+var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+var dbPath = Path.Combine(baseDir, "Tareas.db");
+var connectionString = $"Data Source={dbPath}";
 
-// Agregar conexión a base de datos SQLite
 builder.Services.AddDbContext<TareasContext>(options =>
-    options.UseSqlite("Data Source=Tareas.db"));
+    options.UseSqlite(connectionString));
 
 // Agregar servicios de controllers y endpoints
 builder.Services.AddControllers();
