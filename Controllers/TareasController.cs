@@ -35,14 +35,44 @@ namespace TareasAPI.Controllers
             return tarea;
         }
 
+        [HttpGet("buscar")]
+        public async Task<ActionResult<IEnumerable<Tarea>>> Buscar(
+    int? id = null,
+    string? nombre = null,
+    bool? completada = null)
+        {
+            var query = _context.Tareas.AsQueryable();
+
+            if (id.HasValue)
+                query = query.Where(t => t.Id == id.Value);
+
+            if (!string.IsNullOrWhiteSpace(nombre))
+                query = query.Where(t => t.Nombre.Contains(nombre));
+
+            if (completada.HasValue)
+                query = query.Where(t => t.Completada == completada.Value);
+
+            var resultados = await query.ToListAsync();
+            return Ok(resultados);
+        }
+
         // POST: api/tareas
         [HttpPost]
-        public async Task<ActionResult<Tarea>> PostTarea(Tarea tarea)
+        public async Task<ActionResult<Tarea>> CrearTarea(Tarea tarea)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Validar que no exista tarea con el mismo nombre
+            bool existe = await _context.Tareas.AnyAsync(t => t.Nombre == tarea.Nombre);
+            if (existe)
+                return Conflict(new { mensaje = "Ya existe una tarea con ese nombre." });
+
+
             _context.Tareas.Add(tarea);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetTarea), new { id = tarea.Id }, tarea);
+            return CreatedAtAction(nameof(Buscar), new { id = tarea.Id }, tarea);
         }
 
         // PUT: api/tareas/5
@@ -51,6 +81,16 @@ namespace TareasAPI.Controllers
         {
             if (id != tarea.Id)
                 return BadRequest();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Validar que no exista tarea con el mismo nombre
+            bool existe = await _context.Tareas
+    .AnyAsync(t => t.Nombre == tarea.Nombre && t.Id != tarea.Id);
+
+            if (existe)
+                return Conflict(new { mensaje = "Ya existe una tarea con ese nombre." });
 
             _context.Entry(tarea).State = EntityState.Modified;
 
