@@ -24,6 +24,16 @@ var app = builder.Build();
     app.UseSwaggerUI();
 //}
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
+
+app.UseCors("AllowAll");
+
 app.MapControllers();
 
 app.Run();
